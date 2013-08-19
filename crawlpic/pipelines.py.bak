@@ -1,0 +1,201 @@
+# Define your item pipelines here
+#
+# Don't forget to add your pipeline to the ITEM_PIPELINES setting
+# See: http://doc.scrapy.org/topics/item-pipeline.html
+
+class CrawlpicPipeline(object):
+    def process_item(self, item, spider):
+#        return item
+	pass 
+from scrapy.contrib.pipeline.images import ImagesPipeline
+from scrapy.exceptions import DropItem
+from scrapy.http import Request
+
+class sMyImagesPipeline(ImagesPipeline):
+	def __init__(self, store_uri, download_func=None):
+        	self.store = store_uri
+        	super(MyImagesPipeline,self).__init__(store_uri, download_func=None)
+	@classmethod
+	def from_settings(cls, settings):	
+		store_uri = settings['IMAGES_STORE']
+       		return cls(store_uri)
+	def get_media_requests(self, item, info):
+		for image_url in item['image_urls']:
+			yield Request(image_url,meta={'id':item['title']})
+	def image_key(self,p,url):
+        	image_guid = hashlib.sha1(url).hexdigest()
+        	return '%s/full/%s.jpg' % (p,image_guid)
+	def get_images(self, response, request, info):
+        	key = self.image_key(response.meta.get('id'),request.url)
+		orig_image = Image.open(StringIO(response.body))
+
+        	width, height = orig_image.size
+        	if width < self.MIN_WIDTH or height < self.MIN_HEIGHT:
+            		raise ImageException("Image too small (%dx%d < %dx%d)" %
+                                 	(width, height, self.MIN_WIDTH, self.MIN_HEIGHT))
+
+        	image, buf = self.convert_image(orig_image)
+        	yield key, image, buf
+	def media_downloaded(self, response, request, info):
+		referer = request.headers.get('Referer')
+
+        	if response.status != 200:
+            		log.msg(format='Image (code: %(status)s): Error downloading image from %(request)s referred in <%(referer)s>',
+                    		level=log.WARNING, spider=info.spider,
+                    		status=response.status, request=request, referer=referer)
+            		raise ImageException('download-error')
+
+        	if not response.body:
+            		log.msg(format='Image (empty-content): Empty image from %(request)s referred in <%(referer)s>: no-content',
+                    		level=log.WARNING, spider=info.spider,
+                    		request=request, referer=referer)
+            		raise ImageException('empty-content')
+
+        		status = 'cached' if 'cached' in response.flags else 'downloaded'
+        		log.msg(format='Image (%(status)s): Downloaded image from %(request)s referred in <%(referer)s>',
+                		level=log.DEBUG, spider=info.spider,
+                		status=status, request=request, referer=referer)
+        	self.inc_stats(info.spider, status)
+        	try:
+            		key = self.image_key(resposdanse.meta.get('id'),request.url)
+            		checksum = self.image_downloaded(response, request, info)
+        	except ImageException as exc:
+            		whyfmt = 'Image (error): Error processing image from %(request)s referred in <%(referer)s>: %(errormsg)s'
+            		log.msg(format=whyfmt, level=log.WARNING, spider=info.spider,
+                    		request=request, referer=referer, errormsg=str(exc))
+            		raise
+        	except Exception as exc:
+            		whyfmt = 'Image (unknown-error): Error processing image from %(request)s referred in <%(referer)s>'
+            		log.err(None, whyfmt % {'request': request, 'referer': referer}, spider=info.spider)
+            		raise ImageException(str(exc))
+
+        	return {'url': request.url, 'path': key, 'checksum': checksum}
+
+		print key
+	
+	def media_to_download(self, request, info):
+		 def _onsuccess(result):
+            		if not result:
+                		return # returning None force download
+
+            		last_modified = result.get('last_modified', None)
+            		if not last_modified:
+                		return # returning None force download
+
+            		age_seconds = time.time() - last_modified
+            		age_days = age_seconds / 60 / 60 / 24
+            		if age_days > self.EXPIRES:
+                		return # returning None force download
+
+            		referer = request.headers.get('Referer')
+            		log.msg(format='Image (uptodate): Downloaded %(medianame)s from %(request)s referred in <%(referer)s>',
+                    		level=log.DEBUG, spider=info.spider,
+                    		medianame=self.MEDIA_NAME, request=request, referer=referer)
+            		self.inc_stats(info.spider, 'uptodate')
+
+            		checksum = result.get('checksum', None)
+            		return {'url': request.url, 'path': key, 'checksum': checksum}
+
+        		key = self.image_key(response.meta.get('id'),request.url)
+        		dfd = defer.maybeDeferred(self.store.stat_image, key, info)
+        		dfd.addCallbacks(_onsuccess, lambda _: None)
+        		dfd.addErrback(log.err, self.__class__.__name__ + '.store.stat_image')
+        		return dfd
+
+	def item_completed(self, results, item, info):
+		image_paths = [x['path'] for ok, x in results if ok]
+		if not image_paths:
+			raise DropItem("item contains no images")
+		item['image_paths'] = image_paths
+		return item
+class MyImagesPipeline(ImagesPipeline):
+    """
+this is for download the book covor image and then complete the
+book_covor_image_path field to the picture's path in the file system.
+"""
+    def __init__(self, store_uri, download_func=None):
+        self.images_store = store_uri
+        super(MyImagesPipeline,self).__init__(store_uri, download_func=None)
+
+    def get_media_requests(self, item, info):
+	for image_url in item['image_urls']:
+		yield Request(image_url,meta={'id':item['title']})
+    def get_images(self, response, request, info):
+                key = self.image_key(response.meta.get('id'),request.url)
+		print "sasads"
+		
+                orig_image = Image.open(StringIO(response.body))
+
+                width, height = orig_image.size
+                if width < self.MIN_WIDTH or height < self.MIN_HEIGHT:
+                        raise ImageException("Image too small (%dx%d < %dx%d)" %
+                                        (width, height, self.MIN_WIDTH, self.MIN_HEIGHT))
+
+                image, buf = self.convert_image(orig_image)
+                yield key, image, buf
+
+		print response.meta.get('id')
+    def image_key(self,p,url):
+                image_guid = hashlib.sha1(url).hexdigest()
+                return '%s/full/%s.jpg' % (p,image_guid)
+import redis
+
+from twisted.internet.threads import deferToThread
+from scrapy.utils.serialize import ScrapyJSONEncoder
+
+
+class RedisPipeline(object):
+    """Pushes serialized item into a redis list/queue"""
+
+    def __init__(self, host, port):
+        self.server = redis.Redis(host, port)
+        self.encoder = ScrapyJSONEncoder()
+
+    @classmethod
+    def from_settings(cls, settings):
+        host = settings.get('REDIS_HOST', 'localhost')
+        port = settings.get('REDIS_PORT', 6379)
+        return cls(host, port)
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls.from_settings(crawler.settings)
+
+    def process_item(self, item, spider):
+        return deferToThread(self._process_item, item, spider)
+
+    def _process_item(self, item, spider):
+        key = self.item_key(item, spider)
+        data = self.encoder.encode(item)
+        self.server.rpush(key, data)
+        return item
+
+    def item_key(self, item, spider):
+        """Returns redis key based on given spider"""
+        return "%s:items" % spider.name
+import MySQLdb  
+import MySQLdb.cursors
+from twisted.enterprise import adbapi
+class MyMysqlPipeline(object):
+	def __init__(self):
+		self.dbpool = adbapi.ConnectionPool('MySQLdb',  
+                db = 'tieba',  
+                user = 'root',  
+                passwd = '',  
+                cursorclass = MySQLdb.cursors.DictCursor,  
+                charset = 'utf8',  
+                use_unicode = False  
+        )  
+
+	def process_item(self, item, spider):
+		query = self.dbpool.runInteraction(self._conditional_insert, item)  
+		return item
+	def _conditional_insert(self, tx, item):
+		tx.execute(\
+                	"insert into info (title,count,url) "
+                	"values (%s, %s,%s)",
+                	(item['title'],
+                 	len(item['image_urls']),
+			item['url'])
+            	)
+

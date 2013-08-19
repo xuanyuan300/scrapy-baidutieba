@@ -1,0 +1,110 @@
+2013-08-08 22:21:10+0800 [scrapy] INFO: Scrapy 0.16.5 started (bot: crawlpic)
+2013-08-08 22:21:11+0800 [scrapy] DEBUG: Enabled extensions: LogStats, TelnetConsole, CloseSpider, WebService, CoreStats, SpiderState
+2013-08-08 22:22:42+0800 [scrapy] INFO: Scrapy 0.16.5 started (bot: crawlpic)
+2013-08-08 22:22:43+0800 [scrapy] DEBUG: Enabled extensions: LogStats, TelnetConsole, CloseSpider, WebService, CoreStats, SpiderState
+2013-08-08 22:23:46+0800 [scrapy] INFO: Scrapy 0.16.5 started (bot: crawlpic)
+2013-08-08 22:23:46+0800 [scrapy] DEBUG: Enabled extensions: LogStats, TelnetConsole, CloseSpider, WebService, CoreStats, SpiderState
+2013-08-08 22:23:47+0800 [scrapy] DEBUG: Enabled downloader middlewares: HttpAuthMiddleware, DownloadTimeoutMiddleware, UserAgentMiddleware, RetryMiddleware, DefaultHeadersMiddleware, RedirectMiddleware, CookiesMiddleware, HttpCompressionMiddleware, ChunkedTransferMiddleware, DownloaderStats
+2013-08-08 22:23:47+0800 [scrapy] DEBUG: Enabled spider middlewares: HttpErrorMiddleware, OffsiteMiddleware, RefererMiddleware, UrlLengthMiddleware, DepthMiddleware
+2013-08-08 22:23:47+0800 [scrapy] DEBUG: Enabled item pipelines: ImagesPipeline, RedisPipeline
+2013-08-08 22:23:47+0800 [tieba] INFO: Spider opened
+2013-08-08 22:23:47+0800 [-] ERROR: Unhandled error in Deferred:
+2013-08-08 22:23:47+0800 [-] Unhandled Error
+	Traceback (most recent call last):
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/cmdline.py", line 138, in _run_command
+	    cmd.run(args, opts)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/commands/crawl.py", line 44, in run
+	    self.crawler.crawl(spider)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/crawler.py", line 47, in crawl
+	    return self.engine.open_spider(spider, requests)
+	  File "/usr/lib/python2.6/site-packages/Twisted-13.1.0-py2.6-linux-x86_64.egg/twisted/internet/defer.py", line 1213, in unwindGenerator
+	    return _inlineCallbacks(None, gen, Deferred())
+	--- <exception caught here> ---
+	  File "/usr/lib/python2.6/site-packages/Twisted-13.1.0-py2.6-linux-x86_64.egg/twisted/internet/defer.py", line 1070, in _inlineCallbacks
+	    result = g.send(result)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/core/engine.py", line 222, in open_spider
+	    yield scheduler.open(spider)
+	  File "/root/crawlpic/crawlpic/scrapy_redis/scheduler.py", line 69, in open
+	    if len(self.queue):
+	  File "/root/crawlpic/crawlpic/scrapy_redis/queue.py", line 77, in __len__
+	    return self.server.zcard(self.key)
+	  File "/usr/lib/python2.6/site-packages/redis-2.7.6-py2.6.egg/redis/client.py", line 1155, in zcard
+	    return self.execute_command('ZCARD', name)
+	  File "/usr/lib/python2.6/site-packages/redis-2.7.6-py2.6.egg/redis/client.py", line 381, in execute_command
+	    connection.send_command(*args)
+	  File "/usr/lib/python2.6/site-packages/redis-2.7.6-py2.6.egg/redis/connection.py", line 304, in send_command
+	    self.send_packed_command(self.pack_command(*args))
+	  File "/usr/lib/python2.6/site-packages/redis-2.7.6-py2.6.egg/redis/connection.py", line 286, in send_packed_command
+	    self.connect()
+	  File "/usr/lib/python2.6/site-packages/redis-2.7.6-py2.6.egg/redis/connection.py", line 234, in connect
+	    raise ConnectionError(self._error_message(e))
+	redis.exceptions.ConnectionError: Error 111 connecting localhost:6379. Connection refused.
+	
+2013-08-08 22:23:47+0800 [scrapy] DEBUG: Telnet console listening on 0.0.0.0:6023
+2013-08-08 22:23:47+0800 [scrapy] DEBUG: Web service listening on 0.0.0.0:6080
+2013-08-09 00:27:12+0800 [scrapy] INFO: Received SIGINT, shutting down gracefully. Send again to force 
+2013-08-09 00:27:12+0800 [tieba] INFO: Closing spider (shutdown)
+2013-08-09 00:27:12+0800 [tieba] Unhandled Error
+	Traceback (most recent call last):
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/core/engine.py", line 281, in _close_all_spiders
+	    dfds = [self.close_spider(s, reason='shutdown') for s in self.open_spiders]
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/core/engine.py", line 256, in close_spider
+	    dfd.addBoth(lambda _: self.scraper.close_spider(spider))
+	  File "/usr/lib/python2.6/site-packages/Twisted-13.1.0-py2.6-linux-x86_64.egg/twisted/internet/defer.py", line 327, in addBoth
+	    callbackKeywords=kw, errbackKeywords=kw)
+	  File "/usr/lib/python2.6/site-packages/Twisted-13.1.0-py2.6-linux-x86_64.egg/twisted/internet/defer.py", line 293, in addCallbacks
+	    self._runCallbacks()
+	--- <exception caught here> ---
+	  File "/usr/lib/python2.6/site-packages/Twisted-13.1.0-py2.6-linux-x86_64.egg/twisted/internet/defer.py", line 575, in _runCallbacks
+	    current.result = callback(current.result, *args, **kw)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/core/engine.py", line 256, in <lambda>
+	    dfd.addBoth(lambda _: self.scraper.close_spider(spider))
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/core/scraper.py", line 81, in close_spider
+	    assert spider in self.slots, "Spider not opened: %s" % spider
+	exceptions.AssertionError: Spider not opened: <crawlpic 'tieba' at 0x37e0e90>
+	
+2013-08-09 00:27:12+0800 [tieba] ERROR: Error caught on signal handler: <bound method ?.spider_closed of <scrapy.contrib.logstats.LogStats object at 0x30032d0>>
+	Traceback (most recent call last):
+	  File "/usr/lib/python2.6/site-packages/Twisted-13.1.0-py2.6-linux-x86_64.egg/twisted/internet/defer.py", line 575, in _runCallbacks
+	    current.result = callback(current.result, *args, **kw)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/core/engine.py", line 265, in <lambda>
+	    spider=spider, reason=reason, spider_stats=self.crawler.stats.get_stats()))
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/signalmanager.py", line 23, in send_catch_log_deferred
+	    return signal.send_catch_log_deferred(*a, **kw)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/utils/signal.py", line 53, in send_catch_log_deferred
+	    *arguments, **named)
+	--- <exception caught here> ---
+	  File "/usr/lib/python2.6/site-packages/Twisted-13.1.0-py2.6-linux-x86_64.egg/twisted/internet/defer.py", line 137, in maybeDeferred
+	    result = f(*args, **kw)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/xlib/pydispatch/robustapply.py", line 47, in robustApply
+	    return receiver(*arguments, **named)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/contrib/logstats.py", line 46, in spider_closed
+	    del self.slots[spider]
+	exceptions.KeyError: <crawlpic 'tieba' at 0x37e0e90>
+	
+2013-08-09 00:27:12+0800 [tieba] ERROR: Error caught on signal handler: <bound method ?.spider_closed of <scrapy.contrib.spidermiddleware.offsite.OffsiteMiddleware object at 0x37b7ed0>>
+	Traceback (most recent call last):
+	  File "/usr/lib/python2.6/site-packages/Twisted-13.1.0-py2.6-linux-x86_64.egg/twisted/internet/defer.py", line 575, in _runCallbacks
+	    current.result = callback(current.result, *args, **kw)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/core/engine.py", line 265, in <lambda>
+	    spider=spider, reason=reason, spider_stats=self.crawler.stats.get_stats()))
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/signalmanager.py", line 23, in send_catch_log_deferred
+	    return signal.send_catch_log_deferred(*a, **kw)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/utils/signal.py", line 53, in send_catch_log_deferred
+	    *arguments, **named)
+	--- <exception caught here> ---
+	  File "/usr/lib/python2.6/site-packages/Twisted-13.1.0-py2.6-linux-x86_64.egg/twisted/internet/defer.py", line 137, in maybeDeferred
+	    result = f(*args, **kw)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/xlib/pydispatch/robustapply.py", line 47, in robustApply
+	    return receiver(*arguments, **named)
+	  File "/usr/lib/python2.6/site-packages/Scrapy-0.16.5-py2.6.egg/scrapy/contrib/spidermiddleware/offsite.py", line 61, in spider_closed
+	    del self.host_regexes[spider]
+	exceptions.KeyError: <crawlpic 'tieba' at 0x37e0e90>
+	
+2013-08-09 00:27:12+0800 [tieba] INFO: Dumping Scrapy stats:
+	{'finish_reason': 'shutdown',
+	 'finish_time': datetime.datetime(2013, 8, 8, 16, 27, 12, 263676),
+	 'log_count/DEBUG': 6,
+	 'log_count/ERROR': 5,
+	 'log_count/INFO': 4}
+2013-08-09 00:27:12+0800 [tieba] INFO: Spider closed (shutdown)
